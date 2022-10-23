@@ -10,7 +10,7 @@
 		DODATNI ZADATAK
 		1. Dobaviti i ispisati lokalno ime i adresu računara - gethostbyname()
 		2. Kreirati adresnu strukturu koja koristi dobijenu ip adresu iz prethodnog koraka - (umesto ip adrese 127.0.0.1) struct sockaddr_in
-		3. Dobaviti i ispisati adresu soketa nakon povezivanja soketa sa kreiranom adresom - getsockname() 
+		3. Dobaviti i ispisati adresu soketa nakon povezivanja soketa sa kreiranom adresom - getsockname()
 */
 #define _WINSOCK_DEPRECATED_NO_WARNINGS
 #define WIN32_LEAN_AND_MEAN
@@ -53,9 +53,9 @@ int main(void)
 	unsigned long mrezniRedosleBajtova;
 
 	mrezniRedosleBajtova = htonl(podatak);
-	
+
 	/* PRETVARANJE IZ DECIMALNOG FORMATA U BINARNI FORMAT
-	 * 
+	 *
 	 * inet_addr("192.168.10.37");
 	 */
 
@@ -67,9 +67,9 @@ int main(void)
 	SOCKADDR_IN socketAdress;
 	short port = 55555;
 
-	socketAdress.sin_family       = AF_INET; // za IPV4 adrese
-	socketAdress.sin_addr.s_addr  = inet_addr("127.0.0.1");
-	socketAdress.sin_port         = htons(port);
+	socketAdress.sin_family = AF_INET; // za IPV4 adrese
+	socketAdress.sin_addr.s_addr = inet_addr("127.0.0.1");
+	socketAdress.sin_port = htons(port);
 
 
 	// KREIRANJE UTICNICE
@@ -77,8 +77,8 @@ int main(void)
 
 	// SPAJANJE UTICNICE I ADRESE
 
-	int host_result = bind(soc, (struct sockaddr *) &socketAdress, sizeof(socketAdress));
-	
+	int host_result = bind(soc, (struct sockaddr*)&socketAdress, sizeof(socketAdress));
+
 	if (host_result == 0)
 	{
 		printf("Host socket binded successfully!\n");
@@ -89,14 +89,42 @@ int main(void)
 	}
 
 	// 1. Dobaviti i ispisati lokalno ime i adresu računara - gethostbyname()
-	char *adr = inet_ntoa(socketAdress.sin_addr);
+	char* adr = inet_ntoa(socketAdress.sin_addr);
 	int len = sizeof(socketAdress.sin_addr.s_addr);
-	auto hostnet_podaci = gethostbyname(adr);
+	struct hostent *hostnet_podaci = gethostbyname(adr);
+	char ime_hosta[20];
 
+	if (strcmp(hostnet_podaci->h_name, "127.0.0.1") == 0)
+		strcpy(ime_hosta, "localhost");
+	else
+		strcpy(ime_hosta, hostnet_podaci->h_name);
 
 	// ISPIS HOSTNET PODATAKA
 	printf("\n------------------------ ISPIS PODATAKA --------------------------");
-	printf("\n\tIP ADRESA: %s", hostnet_podaci -> h_name);
+	printf("\n\tIP  ADRESA: %s",  hostnet_podaci -> h_name);
+	printf("\n\tIME HOSTA:  %s",  ime_hosta);
+	printf("\n\tTIP ADRESE: %hd\n", hostnet_podaci -> h_addrtype);
+
+	// 2. Kreirati adresnu strukturu koja koristi dobijenu ip adresu iz prethodnog koraka - (umesto ip adrese 127.0.0.1) struct sockaddr_in
+	SOCKADDR_IN dobijenaAdresa;
+
+	dobijenaAdresa.sin_addr.s_addr = inet_addr(hostnet_podaci -> h_name);
+	dobijenaAdresa.sin_port        = htons(50000);
+	dobijenaAdresa.sin_family      = hostnet_podaci->h_addrtype;
+	
+	// 3. Dobaviti i ispisati adresu soketa nakon povezivanja soketa sa kreiranom adresom - getsockname()
+	// Checkout socket address and port
+	struct sockaddr_in sockAddrStruct;
+	int sockAddrLen = sizeof(sockAddrStruct);
+
+	getsockname(soc, (struct sockaddr*)&sockAddrStruct, &sockAddrLen);
+
+	unsigned short sockPort = ntohs(sockAddrStruct.sin_port);
+	char* sockAddress = inet_ntoa(sockAddrStruct.sin_addr);
+
+	printf("\n------------------------ ISPIS PODATAKA --------------------------");
+	printf("\n\tSOCKET IP ADDRESS: %s", sockAddress);
+	printf("\n\tSOCKET PORT:       %d \n\n", sockPort);
 
 	// ZATVARANJE UTICNICA I OSLOBADJANJE RESURSA
 	closesocket(soc);
