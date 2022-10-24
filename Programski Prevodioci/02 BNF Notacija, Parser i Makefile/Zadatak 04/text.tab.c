@@ -1557,7 +1557,7 @@ yyreturn:
 
 int main() {
   /*
-    Zadatak 1:
+    Zadatak 2:
       Proširiti tekst gramatiku tako da se bilo koje dve reči u rečenici mogu odvojiti jednim zarezom.
       Zarez ne sme da se pojavi iza poslednje reči.
   */
