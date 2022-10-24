@@ -73,12 +73,13 @@
   int yyparse(void);
   int yyerror(char *);
   extern int yylineno;
-  int no_of_dots = 0;
-  int uzvicnika = 0;
-  int upitnika = 0;
-  int pasusa = 0;
 
-#line 82 "text.tab.c"
+  int dot_sentence_counter = 0;
+  int qmark_sentence_counter = 0;
+  int emark_sentence_counter = 0;
+  int paragraph_counter = 0;
+
+#line 83 "text.tab.c"
 
 # ifndef YY_CAST
 #  ifdef __cplusplus
@@ -129,10 +130,10 @@ extern int yydebug;
     _DOT = 258,
     _CAPITAL_WORD = 259,
     _WORD = 260,
-    _UZVICNIK = 261,
-    _UPITNIK = 262,
-    _ZAREZ = 263,
-    _NEWLINE = 264
+    _QMARK = 261,
+    _EMARK = 262,
+    _COMMA = 263,
+    _NEW_LINE = 264
   };
 #endif
 
@@ -452,14 +453,14 @@ union yyalloc
 #endif /* !YYCOPY_NEEDED */
 
 /* YYFINAL -- State number of the termination state.  */
-#define YYFINAL  5
+#define YYFINAL  6
 /* YYLAST -- Last index in YYTABLE.  */
-#define YYLAST   13
+#define YYLAST   16
 
 /* YYNTOKENS -- Number of terminals.  */
 #define YYNTOKENS  10
 /* YYNNTS -- Number of nonterminals.  */
-#define YYNNTS  6
+#define YYNNTS  7
 /* YYNRULES -- Number of rules.  */
 #define YYNRULES  14
 /* YYNSTATES -- Number of states.  */
@@ -511,8 +512,8 @@ static const yytype_int8 yytranslate[] =
   /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
 static const yytype_int8 yyrline[] =
 {
-       0,    24,    24,    25,    29,    30,    31,    35,    36,    37,
-      41,    42,    46,    47,    48
+       0,    25,    25,    26,    30,    31,    35,    39,    40,    41,
+      45,    46,    47,    51,    52
 };
 #endif
 
@@ -522,8 +523,8 @@ static const yytype_int8 yyrline[] =
 static const char *const yytname[] =
 {
   "$end", "error", "$undefined", "_DOT", "_CAPITAL_WORD", "_WORD",
-  "_UZVICNIK", "_UPITNIK", "_ZAREZ", "_NEWLINE", "$accept", "text",
-  "sentence", "words", "comma", "new_line", YY_NULLPTR
+  "_QMARK", "_EMARK", "_COMMA", "_NEW_LINE", "$accept", "text",
+  "paragraph", "sentence", "end", "words", "comma", YY_NULLPTR
 };
 #endif
 
@@ -536,7 +537,7 @@ static const yytype_int16 yytoknum[] =
 };
 # endif
 
-#define YYPACT_NINF (-9)
+#define YYPACT_NINF (-4)
 
 #define yypact_value_is_default(Yyn) \
   ((Yyn) == YYPACT_NINF)
@@ -550,8 +551,8 @@ static const yytype_int16 yytoknum[] =
      STATE-NUM.  */
 static const yytype_int8 yypact[] =
 {
-       7,    -9,     2,    -9,    -3,    -9,    -9,    -8,    -8,    -8,
-      -9,     3,    -9,     4,     4,     4,    -9,    -9,    -9
+      12,    -4,     8,    -2,    -4,    -3,    -4,     2,    -4,    -4,
+      -4,    -4,    -4,    -4,    -4,    10,    -4,    -4,    -4
 };
 
   /* YYDEFACT[STATE-NUM] -- Default reduction number in state STATE-NUM.
@@ -559,20 +560,20 @@ static const yytype_int8 yypact[] =
      means the default is an error.  */
 static const yytype_int8 yydefact[] =
 {
-       0,     7,     0,     2,    10,     1,     3,    12,    12,    12,
-      11,     0,    13,     4,     6,     5,     9,     8,    14
+       0,    10,     0,     0,     4,    13,     1,     0,     2,     5,
+       7,     8,     9,    14,     6,     0,     3,    12,    11
 };
 
   /* YYPGOTO[NTERM-NUM].  */
 static const yytype_int8 yypgoto[] =
 {
-      -9,    -9,    10,    -9,    -9,     1
+      -4,    -4,    -1,     6,    -4,    -4,    -4
 };
 
   /* YYDEFGOTO[NTERM-NUM].  */
 static const yytype_int8 yydefgoto[] =
 {
-      -1,     2,     3,     4,    11,    13
+      -1,     2,     3,     4,    14,     5,    15
 };
 
   /* YYTABLE[YYPACT[STATE-NUM]] -- What to do in state STATE-NUM.  If
@@ -580,36 +581,36 @@ static const yytype_int8 yydefgoto[] =
      number is the opposite.  If YYTABLE_NINF, syntax error.  */
 static const yytype_int8 yytable[] =
 {
-       7,    12,     5,     8,     9,    10,     1,    16,    17,    14,
-      15,     1,     6,    18
+      10,     7,     1,    11,    12,    13,     1,     8,     6,     9,
+       0,    16,     1,     9,    17,    18,     1
 };
 
 static const yytype_int8 yycheck[] =
 {
-       3,     9,     0,     6,     7,     8,     4,     4,     5,     8,
-       9,     4,     2,     9
+       3,     2,     4,     6,     7,     8,     4,     9,     0,     3,
+      -1,     9,     4,     7,     4,     5,     4
 };
 
   /* YYSTOS[STATE-NUM] -- The (internal number of the) accessing
      symbol of state STATE-NUM.  */
 static const yytype_int8 yystos[] =
 {
-       0,     4,    11,    12,    13,     0,    12,     3,     6,     7,
-       8,    14,     9,    15,    15,    15,     4,     5,     9
+       0,     4,    11,    12,    13,    15,     0,    12,     9,    13,
+       3,     6,     7,     8,    14,    16,     9,     4,     5
 };
 
   /* YYR1[YYN] -- Symbol number of symbol that rule YYN derives.  */
 static const yytype_int8 yyr1[] =
 {
-       0,    10,    11,    11,    12,    12,    12,    13,    13,    13,
-      14,    14,    15,    15,    15
+       0,    10,    11,    11,    12,    12,    13,    14,    14,    14,
+      15,    15,    15,    16,    16
 };
 
   /* YYR2[YYN] -- Number of symbols on the right hand side of rule YYN.  */
 static const yytype_int8 yyr2[] =
 {
-       0,     2,     1,     2,     3,     3,     3,     1,     3,     3,
-       0,     1,     0,     1,     2
+       0,     2,     2,     3,     1,     2,     2,     1,     1,     1,
+       1,     3,     3,     0,     1
 };
 
 
@@ -1304,26 +1305,38 @@ yyreduce:
   YY_REDUCE_PRINT (yyn);
   switch (yyn)
     {
-  case 4:
-#line 29 "text.y"
-                                     { no_of_dots++; pasusa++; }
-#line 1311 "text.tab.c"
+  case 2:
+#line 25 "text.y"
+                             { paragraph_counter++; }
+#line 1312 "text.tab.c"
     break;
 
-  case 5:
-#line 30 "text.y"
-                                     { upitnika++; pasusa++; }
-#line 1317 "text.tab.c"
+  case 3:
+#line 26 "text.y"
+                             { paragraph_counter++; }
+#line 1318 "text.tab.c"
     break;
 
-  case 6:
-#line 31 "text.y"
-                                     { uzvicnika++; pasusa++; }
-#line 1323 "text.tab.c"
+  case 7:
+#line 39 "text.y"
+           { dot_sentence_counter++; }
+#line 1324 "text.tab.c"
+    break;
+
+  case 8:
+#line 40 "text.y"
+           { qmark_sentence_counter++; }
+#line 1330 "text.tab.c"
+    break;
+
+  case 9:
+#line 41 "text.y"
+           { emark_sentence_counter++; }
+#line 1336 "text.tab.c"
     break;
 
 
-#line 1327 "text.tab.c"
+#line 1340 "text.tab.c"
 
       default: break;
     }
@@ -1555,21 +1568,27 @@ yyreturn:
 #endif
   return yyresult;
 }
-#line 51 "text.y"
+#line 55 "text.y"
 
 
 int main() {
+  /*
+    Zadatak 3:
+      Proširiti tekst gramatiku pasusima:
+        - Tekst je niz od jednog ili više pasusa.
+        - Pasus je niz od jedne ili više rečenica.
+        - Pasusi su odvojeni bar jednim znakom NEWLINE.
+      
+        Na kraju programa ispisati ukupan broj pasusa.
+  */
   yyparse();
-  // zadatak 1
-  printf("\nBroj izjavnih recenica je: %d", no_of_dots);
-  printf("\nBroj upitnih recenica je: %d", upitnika);
-  printf("\nBroj pasusa je: %d", pasusa);
-  printf("\nBroj uzvicnih recenica je: %d\n\n", uzvicnika);
 
-  // zadatak 2
+  printf("\nBroj izjavnih recenica je: %d", dot_sentence_counter);
+  printf("\nBroj upitnih recenica je: %d", qmark_sentence_counter );
+  printf("\nBroj uzvicnih recenica je: %d", emark_sentence_counter);
+  printf("\nBroj pasusa je: %d\n\n", paragraph_counter);
 }
 
 int yyerror(char *s) {
   fprintf(stderr, "line %d: SYNTAX ERROR %s\n", yylineno, s);
 } 
-

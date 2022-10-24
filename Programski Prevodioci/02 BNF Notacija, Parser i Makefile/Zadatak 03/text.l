@@ -10,11 +10,10 @@
 "."         { return _DOT; }
 [A-Z][a-z]* { return _CAPITAL_WORD; }
 [a-z]+      { return _WORD; }
-"?"         { return _UPITNIK; }
-"!"         { return _UZVICNIK; }
-","         { return _ZAREZ; }      
-[\n]+        { return _NEWLINE; }
-
+"?"         { return _QMARK; }
+"!"         { return _EMARK; }
+","         { return _COMMA; }
+[\n]+       { return _NEW_LINE; }
 
 .           { printf("\nline %d: LEXICAL ERROR on char %c", 
                       yylineno, *yytext); }    

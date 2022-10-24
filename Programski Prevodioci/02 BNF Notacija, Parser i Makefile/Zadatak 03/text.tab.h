@@ -52,10 +52,10 @@ extern int yydebug;
     _DOT = 258,
     _CAPITAL_WORD = 259,
     _WORD = 260,
-    _UZVICNIK = 261,
-    _UPITNIK = 262,
-    _ZAREZ = 263,
-    _NEWLINE = 264
+    _QMARK = 261,
+    _EMARK = 262,
+    _COMMA = 263,
+    _NEW_LINE = 264
   };
 #endif
 

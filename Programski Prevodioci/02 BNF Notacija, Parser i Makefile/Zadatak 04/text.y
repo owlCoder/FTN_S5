@@ -4,64 +4,62 @@
   int yyparse(void);
   int yyerror(char *);
   extern int yylineno;
-  int no_of_dots = 0;
-  int uzvicnika = 0;
-  int upitnika = 0;
-  int pasusa = 0;
+
+  int dot_sentence_counter = 0;
+  int qmark_sentence_counter = 0;
+  int emark_sentence_counter = 0;
 %}
 
 %token  _DOT
 %token  _CAPITAL_WORD
 %token  _WORD
-%token  _UZVICNIK
-%token  _UPITNIK
-%token  _ZAREZ
-%token  _NEWLINE
+%token _QMARK
+%token _EMARK
+%token _COMMA
 
 %%
 
-text 
+text
   : sentence
   | text sentence
   ;
-          
-sentence 
-  : words _DOT new_line              { no_of_dots++; pasusa++; }
-  | words _UPITNIK  new_line         { upitnika++; pasusa++; }
-  | words _UZVICNIK new_line         { uzvicnika++; pasusa++; }
+
+sentence
+  : words end
   ;
 
-words 
+end
+  : _DOT   { dot_sentence_counter++; }
+  | _QMARK { qmark_sentence_counter++; }
+  | _EMARK { emark_sentence_counter++; }
+  ;
+
+words
   : _CAPITAL_WORD
   | words comma _WORD
   | words comma _CAPITAL_WORD
   ;
 
 comma
-  :
-  | _ZAREZ
-  ; 
-
-new_line
-  :
-  | _NEWLINE
-  | new_line _NEWLINE
-  ; 
+  : /* empty */
+  | _COMMA
+  ;
 
 %%
 
 int main() {
+  /*
+    Zadatak 2:
+      Proširiti tekst gramatiku tako da se bilo koje dve reči u rečenici mogu odvojiti jednim zarezom.
+      Zarez ne sme da se pojavi iza poslednje reči.
+  */
   yyparse();
-  // zadatak 1
-  printf("\nBroj izjavnih recenica je: %d", no_of_dots);
-  printf("\nBroj upitnih recenica je: %d", upitnika);
-  printf("\nBroj pasusa je: %d", pasusa);
-  printf("\nBroj uzvicnih recenica je: %d\n\n", uzvicnika);
 
-  // zadatak 2
+  printf("\nBroj izjavnih recenica je: %d", dot_sentence_counter);
+  printf("\nBroj upitnih recenica je: %d", qmark_sentence_counter );
+  printf("\nBroj uzvicnih recenica je: %d\n\n", emark_sentence_counter);
 }
 
 int yyerror(char *s) {
   fprintf(stderr, "line %d: SYNTAX ERROR %s\n", yylineno, s);
 } 
-
