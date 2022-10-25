@@ -1,5 +1,5 @@
 using Plots
-
+# nije kao zadato, korigovati!
 t = -1:0.0001:1
 y = sqrt.(1.0 .- t.^2)
 
