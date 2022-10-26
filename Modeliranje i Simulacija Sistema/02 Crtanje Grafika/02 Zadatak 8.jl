@@ -26,7 +26,7 @@ y1_a = y_trougao .* (tp .< 0.4)
 y1_b = y_trougao .* (tp .> 1.6)
 y2 = y_kruznica .* ((tp .>= 0.4) .& (tp .<= 1.6))
 
-y = y1_a + y1_b + y2
+y = y1_a .+ y1_b .+ y2
 
 plot!(t_domen, y, xticks=0:4, label="y", color=:green, lw=2)
 
