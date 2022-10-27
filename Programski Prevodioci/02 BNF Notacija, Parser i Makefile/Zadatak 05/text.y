@@ -8,6 +8,7 @@
   int uzvicnika = 0;
   int upitnika = 0;
   int pasusa = 0;
+  int clanova_liste = 0;
 %}
 
 %token  _DOT
@@ -17,8 +18,24 @@
 %token  _UPITNIK
 %token  _ZAREZ
 %token  _NEWLINE
+%token  _NUMBER
 
 %%
+
+start
+  : text_prefix text
+  | /* empty */
+  ;
+
+text_prefix
+  : list
+  | /* empty */
+  ;
+
+list
+  : _NUMBER _DOT sentence { clanova_liste++; }
+  | list _NUMBER _DOT sentence { clanova_liste++; }
+  ;
 
 text 
   : sentence
@@ -56,6 +73,7 @@ int main() {
   printf("\nBroj izjavnih recenica je: %d", no_of_dots);
   printf("\nBroj upitnih recenica je: %d", upitnika);
   printf("\nBroj pasusa je: %d", pasusa);
+  printf("\nBroj clanova liste je: %d", clanova_liste);
   printf("\nBroj uzvicnih recenica je: %d\n\n", uzvicnika);
 
   // zadatak 2

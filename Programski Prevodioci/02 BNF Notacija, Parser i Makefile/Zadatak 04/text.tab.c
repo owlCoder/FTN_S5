@@ -77,8 +77,9 @@
   int dot_sentence_counter = 0;
   int qmark_sentence_counter = 0;
   int emark_sentence_counter = 0;
+  int paragraph_counter = 0;
 
-#line 82 "text.tab.c"
+#line 83 "text.tab.c"
 
 # ifndef YY_CAST
 #  ifdef __cplusplus
@@ -131,7 +132,10 @@ extern int yydebug;
     _WORD = 260,
     _QMARK = 261,
     _EMARK = 262,
-    _COMMA = 263
+    _COMMA = 263,
+    _NEW_LINE = 264,
+    _COLON = 265,
+    _CHARACTER = 266
   };
 #endif
 
@@ -453,19 +457,19 @@ union yyalloc
 /* YYFINAL -- State number of the termination state.  */
 #define YYFINAL  5
 /* YYLAST -- Last index in YYTABLE.  */
-#define YYLAST   9
+#define YYLAST   12
 
 /* YYNTOKENS -- Number of terminals.  */
-#define YYNTOKENS  9
+#define YYNTOKENS  12
 /* YYNNTS -- Number of nonterminals.  */
-#define YYNNTS  6
+#define YYNNTS  7
 /* YYNRULES -- Number of rules.  */
-#define YYNRULES  12
+#define YYNRULES  14
 /* YYNSTATES -- Number of states.  */
-#define YYNSTATES  15
+#define YYNSTATES  19
 
 #define YYUNDEFTOK  2
-#define YYMAXUTOK   263
+#define YYMAXUTOK   266
 
 
 /* YYTRANSLATE(TOKEN-NUM) -- Symbol number corresponding to TOKEN-NUM
@@ -503,15 +507,15 @@ static const yytype_int8 yytranslate[] =
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     1,     2,     3,     4,
-       5,     6,     7,     8
+       5,     6,     7,     8,     9,    10,    11
 };
 
 #if YYDEBUG
   /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
 static const yytype_int8 yyrline[] =
 {
-       0,    23,    23,    24,    28,    32,    33,    34,    38,    39,
-      40,    44,    45
+       0,    27,    27,    28,    32,    33,    37,    41,    42,    43,
+      47,    48,    49,    53,    54
 };
 #endif
 
@@ -521,8 +525,8 @@ static const yytype_int8 yyrline[] =
 static const char *const yytname[] =
 {
   "$end", "error", "$undefined", "_DOT", "_CAPITAL_WORD", "_WORD",
-  "_QMARK", "_EMARK", "_COMMA", "$accept", "text", "sentence", "end",
-  "words", "comma", YY_NULLPTR
+  "_QMARK", "_EMARK", "_COMMA", "_NEW_LINE", "_COLON", "_CHARACTER",
+  "$accept", "text", "character", "sentence", "end", "words", "comma", YY_NULLPTR
 };
 #endif
 
@@ -531,11 +535,12 @@ static const char *const yytname[] =
    (internal) symbol number NUM (which must be that of a token).  */
 static const yytype_int16 yytoknum[] =
 {
-       0,   256,   257,   258,   259,   260,   261,   262,   263
+       0,   256,   257,   258,   259,   260,   261,   262,   263,   264,
+     265,   266
 };
 # endif
 
-#define YYPACT_NINF (-4)
+#define YYPACT_NINF (-10)
 
 #define yypact_value_is_default(Yyn) \
   ((Yyn) == YYPACT_NINF)
@@ -549,8 +554,8 @@ static const yytype_int16 yytoknum[] =
      STATE-NUM.  */
 static const yytype_int8 yypact[] =
 {
-       5,    -4,     2,    -4,    -3,    -4,    -4,    -4,    -4,    -4,
-      -4,    -4,     3,    -4,    -4
+      -9,    -7,     0,     5,   -10,   -10,     5,   -10,   -10,    -2,
+     -10,   -10,   -10,   -10,   -10,   -10,     3,   -10,   -10
 };
 
   /* YYDEFACT[STATE-NUM] -- Default reduction number in state STATE-NUM.
@@ -558,20 +563,20 @@ static const yytype_int8 yypact[] =
      means the default is an error.  */
 static const yytype_int8 yydefact[] =
 {
-       0,     8,     0,     2,    11,     1,     3,     5,     6,     7,
-      12,     4,     0,    10,     9
+       5,     0,     5,     0,     4,     1,     0,    10,     2,    13,
+       3,     7,     8,     9,    14,     6,     0,    12,    11
 };
 
   /* YYPGOTO[NTERM-NUM].  */
 static const yytype_int8 yypgoto[] =
 {
-      -4,    -4,    -1,    -4,    -4,    -4
+     -10,   -10,     8,     6,   -10,   -10,   -10
 };
 
   /* YYDEFGOTO[NTERM-NUM].  */
 static const yytype_int8 yydefgoto[] =
 {
-      -1,     2,     3,    11,     4,    12
+      -1,     2,     3,     8,    15,     9,    16
 };
 
   /* YYTABLE[YYPACT[STATE-NUM]] -- What to do in state STATE-NUM.  If
@@ -579,34 +584,36 @@ static const yytype_int8 yydefgoto[] =
      number is the opposite.  If YYTABLE_NINF, syntax error.  */
 static const yytype_int8 yytable[] =
 {
-       7,     6,     5,     8,     9,    10,     1,    13,    14,     1
+       5,    11,     1,     4,    12,    13,    14,    17,    18,     7,
+       6,     1,    10
 };
 
 static const yytype_int8 yycheck[] =
 {
-       3,     2,     0,     6,     7,     8,     4,     4,     5,     4
+       0,     3,    11,    10,     6,     7,     8,     4,     5,     4,
+       2,    11,     6
 };
 
   /* YYSTOS[STATE-NUM] -- The (internal number of the) accessing
      symbol of state STATE-NUM.  */
 static const yytype_int8 yystos[] =
 {
-       0,     4,    10,    11,    13,     0,    11,     3,     6,     7,
-       8,    12,    14,     4,     5
+       0,    11,    13,    14,    10,     0,    14,     4,    15,    17,
+      15,     3,     6,     7,     8,    16,    18,     4,     5
 };
 
   /* YYR1[YYN] -- Symbol number of symbol that rule YYN derives.  */
 static const yytype_int8 yyr1[] =
 {
-       0,     9,    10,    10,    11,    12,    12,    12,    13,    13,
-      13,    14,    14
+       0,    12,    13,    13,    14,    14,    15,    16,    16,    16,
+      17,    17,    17,    18,    18
 };
 
   /* YYR2[YYN] -- Number of symbols on the right hand side of rule YYN.  */
 static const yytype_int8 yyr2[] =
 {
-       0,     2,     1,     2,     2,     1,     1,     1,     1,     3,
-       3,     0,     1
+       0,     2,     2,     3,     2,     0,     2,     1,     1,     1,
+       1,     3,     3,     0,     1
 };
 
 
@@ -1301,26 +1308,26 @@ yyreduce:
   YY_REDUCE_PRINT (yyn);
   switch (yyn)
     {
-  case 5:
-#line 32 "text.y"
-           { dot_sentence_counter++; }
-#line 1308 "text.tab.c"
-    break;
-
-  case 6:
-#line 33 "text.y"
-           { qmark_sentence_counter++; }
-#line 1314 "text.tab.c"
-    break;
-
   case 7:
-#line 34 "text.y"
+#line 41 "text.y"
+           { dot_sentence_counter++; }
+#line 1315 "text.tab.c"
+    break;
+
+  case 8:
+#line 42 "text.y"
+           { qmark_sentence_counter++; }
+#line 1321 "text.tab.c"
+    break;
+
+  case 9:
+#line 43 "text.y"
            { emark_sentence_counter++; }
-#line 1320 "text.tab.c"
+#line 1327 "text.tab.c"
     break;
 
 
-#line 1324 "text.tab.c"
+#line 1331 "text.tab.c"
 
       default: break;
     }
@@ -1552,20 +1559,23 @@ yyreturn:
 #endif
   return yyresult;
 }
-#line 48 "text.y"
+#line 57 "text.y"
 
 
 int main() {
   /*
-    Zadatak 2:
-      Proširiti tekst gramatiku tako da se bilo koje dve reči u rečenici mogu odvojiti jednim zarezom.
-      Zarez ne sme da se pojavi iza poslednje reči.
+    Zadatak 4:
+      Proširiti tekst gramatiku tako da podržava format drama - ispred svake rečenice se može naći ime
+      lica koje izgovara tu rečenicu.
+        - Format je sledeći OSOBA ":" rečenica
+        - OSOBA može uzimati jednu od tri vrednosti : HAMLET, KLAUDIJE, OFELIJA.
   */
   yyparse();
 
   printf("\nBroj izjavnih recenica je: %d", dot_sentence_counter);
   printf("\nBroj upitnih recenica je: %d", qmark_sentence_counter );
-  printf("\nBroj uzvicnih recenica je: %d\n\n", emark_sentence_counter);
+  printf("\nBroj uzvicnih recenica je: %d", emark_sentence_counter);
+  printf("\nBroj pasusa je: %d\n\n", paragraph_counter);
 }
 
 int yyerror(char *s) {

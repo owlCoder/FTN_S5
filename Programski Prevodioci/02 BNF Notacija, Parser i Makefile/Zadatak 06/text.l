@@ -13,8 +13,9 @@
 "?"         { return _UPITNIK; }
 "!"         { return _UZVICNIK; }
 ","         { return _ZAREZ; }      
-[\n]+        { return _NEWLINE; }
-
+[\n]+       { return _NEWLINE; }
+"("         { return _LPAREN; }
+")"         { return _RPAREN; }
 
 .           { printf("\nline %d: LEXICAL ERROR on char %c", 
                       yylineno, *yytext); }    

@@ -54,7 +54,10 @@ extern int yydebug;
     _WORD = 260,
     _QMARK = 261,
     _EMARK = 262,
-    _COMMA = 263
+    _COMMA = 263,
+    _NEW_LINE = 264,
+    _COLON = 265,
+    _CHARACTER = 266
   };
 #endif
 

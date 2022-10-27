@@ -17,8 +17,20 @@
 %token  _UPITNIK
 %token  _ZAREZ
 %token  _NEWLINE
+%token  _LPAREN
+%token  _RPAREN
 
 %%
+
+left_prefix
+  : _LPAREN
+  | /* empty */
+  ;
+
+right_postfix
+  : _RPAREN
+  | /* empty */
+  ;
 
 text 
   : sentence
@@ -26,27 +38,18 @@ text
   ;
           
 sentence 
-  : words _DOT new_line              { no_of_dots++; pasusa++; }
-  | words _UPITNIK  new_line         { upitnika++; pasusa++; }
-  | words _UZVICNIK new_line         { uzvicnika++; pasusa++; }
+  : words _DOT              { no_of_dots++; }
+  | words _UPITNIK          { upitnika++; }
+  | words _UZVICNIK         { uzvicnika++; }
   ;
 
 words 
-  : _CAPITAL_WORD
-  | words comma _WORD
-  | words comma _CAPITAL_WORD
+  : left_prefix _CAPITAL_WORD right_postfix
+  | words left_prefix _WORD right_postfix
+  | words left_prefix _CAPITAL_WORD right_postfix
+  | words right_postfix left_prefix
+  | left_prefix right_postfix
   ;
-
-comma
-  :
-  | _ZAREZ
-  ; 
-
-new_line
-  :
-  | _NEWLINE
-  | new_line _NEWLINE
-  ; 
 
 %%
 

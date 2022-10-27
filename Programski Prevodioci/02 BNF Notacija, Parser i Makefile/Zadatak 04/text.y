@@ -8,6 +8,7 @@
   int dot_sentence_counter = 0;
   int qmark_sentence_counter = 0;
   int emark_sentence_counter = 0;
+  int paragraph_counter = 0;
 %}
 
 %token  _DOT
@@ -16,12 +17,20 @@
 %token _QMARK
 %token _EMARK
 %token _COMMA
+%token _NEW_LINE
+%token _COLON
+%token _CHARACTER
 
 %%
 
 text
-  : sentence
-  | text sentence
+  : character sentence
+  | text character sentence
+  ;
+
+character
+  : _CHARACTER _COLON
+  | /* empty */
   ;
 
 sentence
@@ -49,15 +58,18 @@ comma
 
 int main() {
   /*
-    Zadatak 2:
-      Proširiti tekst gramatiku tako da se bilo koje dve reči u rečenici mogu odvojiti jednim zarezom.
-      Zarez ne sme da se pojavi iza poslednje reči.
+    Zadatak 4:
+      Proširiti tekst gramatiku tako da podržava format drama - ispred svake rečenice se može naći ime
+      lica koje izgovara tu rečenicu.
+        - Format je sledeći OSOBA ":" rečenica
+        - OSOBA može uzimati jednu od tri vrednosti : HAMLET, KLAUDIJE, OFELIJA.
   */
   yyparse();
 
   printf("\nBroj izjavnih recenica je: %d", dot_sentence_counter);
   printf("\nBroj upitnih recenica je: %d", qmark_sentence_counter );
-  printf("\nBroj uzvicnih recenica je: %d\n\n", emark_sentence_counter);
+  printf("\nBroj uzvicnih recenica je: %d", emark_sentence_counter);
+  printf("\nBroj pasusa je: %d\n\n", paragraph_counter);
 }
 
 int yyerror(char *s) {

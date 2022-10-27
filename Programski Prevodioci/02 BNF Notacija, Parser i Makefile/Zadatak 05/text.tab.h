@@ -55,7 +55,8 @@ extern int yydebug;
     _UZVICNIK = 261,
     _UPITNIK = 262,
     _ZAREZ = 263,
-    _NEWLINE = 264
+    _NEWLINE = 264,
+    _NUMBER = 265
   };
 #endif
 
