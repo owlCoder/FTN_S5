@@ -5,18 +5,16 @@
 
 %%
 
-[ \t]+    { /* skip */ }
+[ \t\n]+    { /* skip */ }
 
 "."         { return _DOT; }
+":"         { return _COLON; }
+
+HAMLET|KLAUDIJE|OFELIJA { return _ACTOR; }
+
 [A-Z][a-z]* { return _CAPITAL_WORD; }
 [a-z]+      { return _WORD; }
-"?"         { return _QMARK; }
-"!"         { return _EMARK; }
-","         { return _COMMA; }
-[\n]+       { return _NEW_LINE; }
-":"         { return _COLON; }
-HAMLET|OFELIJA|KLAUDIJE { return _CHARACTER; }
-
+                 
 .           { printf("\nline %d: LEXICAL ERROR on char %c", 
                       yylineno, *yytext); }    
 
