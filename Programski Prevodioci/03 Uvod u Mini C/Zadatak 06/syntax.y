@@ -21,6 +21,7 @@
 %token _RBRACKET
 %token _ASSIGN
 %token _SEMICOLON
+%token _COMMA
 %token _AROP
 %token _RELOP
 
@@ -39,7 +40,12 @@ function_list
   ;
 
 function
-  : type _ID _LPAREN parameter _RPAREN body
+  : type _ID _LPAREN parameters _RPAREN body
+  ;
+
+parameters
+  : parameter
+  | parameters _COMMA parameter
   ;
 
 type
@@ -102,12 +108,17 @@ literal
   ;
 
 function_call
-  : _ID _LPAREN argument _RPAREN
+  : _ID _LPAREN argument_list _RPAREN
   ;
 
-argument
+argument_list
   : /* empty */
-  | num_exp
+  | arguments
+  ;
+
+arguments
+  : num_exp
+  | arguments _COMMA num_exp
   ;
 
 if_statement

@@ -21,6 +21,7 @@
 "}"                  { return _RBRACKET; }
 ";"                  { return _SEMICOLON; }
 "="                  { return _ASSIGN; }
+","                  { return _COMMA; }
 
 "+"                  { return _AROP; }
 "-"                  { return _AROP; }
