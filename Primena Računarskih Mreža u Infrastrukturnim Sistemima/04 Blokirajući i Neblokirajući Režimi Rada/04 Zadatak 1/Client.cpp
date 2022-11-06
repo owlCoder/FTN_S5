@@ -15,7 +15,7 @@
 #define SERVER_IP_ADDRESS "127.0.0.1"
 #define SERVER_PORT 15001
 #define BUFFER_SIZE 512
-/*/
+
 int main()
 {
 	sockaddr_in adresaServera;
@@ -80,4 +80,3 @@ int main()
 
 	return 0;
 }
-*/
