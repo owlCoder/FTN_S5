@@ -88,7 +88,7 @@ int main()
 	
 		if (klijenti[brojPovezanihKlijenata] != INVALID_SOCKET)
 		{
-			printf("\nPrvi klijent uspesno povezan na server!");
+			printf("\nKlijent [%d] uspesno povezan na server!", i + 1);
 			printf("\nAdresa klijenta: %s", inet_ntoa(klijentskaAdresa.sin_addr));
 			printf("\nPort   klijenta: %d\n\n", ntohs(klijentskaAdresa.sin_port));
 
