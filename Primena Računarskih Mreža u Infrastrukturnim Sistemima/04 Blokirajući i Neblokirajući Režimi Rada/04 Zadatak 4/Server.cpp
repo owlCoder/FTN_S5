@@ -88,7 +88,7 @@ int main()
 	
 		if (klijenti[brojPovezanihKlijenata] != INVALID_SOCKET)
 		{
-			printf("\nKlijent [%d] uspesno povezan na server!", i + 1);
+			printf("\nKlijent [%d] uspesno povezan na server!", brojPovezanihKlijenata);
 			printf("\nAdresa klijenta: %s", inet_ntoa(klijentskaAdresa.sin_addr));
 			printf("\nPort   klijenta: %d\n\n", ntohs(klijentskaAdresa.sin_port));
 
@@ -110,7 +110,7 @@ int main()
 			}
 			else
 			{
-				printf("Prihvat prvog klijenta neuspesan (%d)!\n", WSAGetLastError());
+				printf("Prihvat klijenta %d neuspesan (%d)!\n", brojPovezanihKlijenata, WSAGetLastError());
 				closesocket(listener);
 				WSACleanup();
 				return 5;
