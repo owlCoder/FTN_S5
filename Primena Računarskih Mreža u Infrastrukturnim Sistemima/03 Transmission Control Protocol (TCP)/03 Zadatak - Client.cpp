@@ -25,7 +25,7 @@ int main()
 	WSADATA wsaData;
 
 	// pokretanje WSA
-	if (WSAStartup(MAKEWORD(2, 2), &wsaData) != 0) 
+	if (WSAStartup(MAKEWORD(2, 2), &wsaData) != 0)
 	{
 		printf("Nije moguce pokrenuti WSA.\nGreska: %d\n", WSAGetLastError());
 		return 1;
@@ -48,7 +48,7 @@ int main()
 	adresaServera.sin_port = htons(SERVER_PORT);
 
 	// povezivanje sa serverom
-	if (connect(socketZaKonekciju, (SOCKADDR * ) &adresaServera, sizeof(adresaServera)) == SOCKET_ERROR)
+	if (connect(socketZaKonekciju, (SOCKADDR*)&adresaServera, sizeof(adresaServera)) == SOCKET_ERROR)
 	{
 		printf("Neuspesno povezivanje na server!\n");
 		closesocket(socketZaKonekciju);
@@ -67,7 +67,7 @@ int main()
 			baferZaPodatke[iResult] = '\0';
 			printf("SERVER: %s\n", baferZaPodatke);
 
-			if (strstr(baferZaPodatke, "PODEBIDILI") || strstr(baferZaPodatke, "IZGUBILI"))
+			if (strstr(baferZaPodatke, "POBEDILI") || strstr(baferZaPodatke, "IZGUBILI"))
 			{
 				kraj = true;
 			}
@@ -97,7 +97,7 @@ int main()
 		gets_s(baferZaPodatke, BUFFER_SIZE);
 
 		iResult = send(socketZaKonekciju, baferZaPodatke, (int)strlen(baferZaPodatke), 0);
-		
+
 		if (iResult == SOCKET_ERROR)
 		{
 			printf("Slanje podataka na server nije uspelo!\nGreska: %d\n", WSAGetLastError());
