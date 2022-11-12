@@ -93,10 +93,10 @@ int main()
 
 		if (iResult > 0)
 		{
-			int *primljenaSuma = (int *) baferZaPodatke;
-			int zbir = ntohl(*primljenaSuma);
+			int *primljeniMaks = (int *) baferZaPodatke;
+			int maks = ntohl(*primljeniMaks);
 
-			printf("\nNajveci od poslatih brojeva je: %d\n", zbir);
+			printf("\nNajveci od poslatih brojeva je: %d\n", maks);
 		}
 		else if (iResult == 0)
 		{
