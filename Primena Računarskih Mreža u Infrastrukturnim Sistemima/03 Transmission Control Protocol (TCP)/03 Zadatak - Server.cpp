@@ -18,9 +18,9 @@
 #define USPESNO     0
 
 // funkcije sa rad sa mrezom
-int povezivanjeSaKlijentom(int IDKlijenta, SOCKET &klijent, SOCKET socketListener, sockaddr_in *adresaKlijenta, int *velicinaKlijentskeAdrese)
+int povezivanjeSaKlijentom(int IDKlijenta, SOCKET& klijent, SOCKET socketListener, sockaddr_in* adresaKlijenta, int* velicinaKlijentskeAdrese)
 {
-	klijent = accept(socketListener, (struct sockaddr *) adresaKlijenta, velicinaKlijentskeAdrese);
+	klijent = accept(socketListener, (struct sockaddr*)adresaKlijenta, velicinaKlijentskeAdrese);
 
 	if (klijent == INVALID_SOCKET)
 	{
@@ -50,7 +50,7 @@ int slanjePodatakaKlijentu(int IDKlijenta, SOCKET klijent1, SOCKET klijent2, cha
 	if (iResult == SOCKET_ERROR)
 	{
 		printf("Slanje podataka klijentu nije uspelo!\nGreska: %d\n", WSAGetLastError());
-		
+
 		shutdown(klijent1, SD_BOTH);
 		shutdown(klijent2, SD_BOTH);
 
@@ -63,8 +63,8 @@ int slanjePodatakaKlijentu(int IDKlijenta, SOCKET klijent1, SOCKET klijent2, cha
 	return USPESNO;
 }
 
-int prihvatPodatakaOdKlijenta(int IDKlijenta, char slovo, SOCKET klijent1, SOCKET klijent2, 
-							  char *bafer, bool &kraj, bool &naRedu, int &tacnih, int &duzinaReci)
+int prihvatPodatakaOdKlijenta(int IDKlijenta, char slovo, SOCKET klijent1, SOCKET klijent2,
+	char* bafer, bool& kraj, bool& naRedu, int& tacnih, int& duzinaReci)
 {
 	int iResult;
 	if (IDKlijenta == 1)
@@ -82,7 +82,7 @@ int prihvatPodatakaOdKlijenta(int IDKlijenta, char slovo, SOCKET klijent1, SOCKE
 
 		printf("Klijent %d je poslao -> (%s)\n", IDKlijenta, bafer);
 
-		if (!strcmp(bafer, "Kraj"))
+		if (!strcmp(bafer, "kraj"))
 		{
 			kraj = true;
 			naRedu = false;
@@ -123,7 +123,7 @@ int prihvatPodatakaOdKlijenta(int IDKlijenta, char slovo, SOCKET klijent1, SOCKE
 	else
 	{
 		printf("Prijem podataka preko mreze nije uspeo!\nGreska: %d\n", WSAGetLastError());
-		
+
 		shutdown(klijent1, SD_BOTH);
 		shutdown(klijent2, SD_BOTH);
 
@@ -138,9 +138,9 @@ int prihvatPodatakaOdKlijenta(int IDKlijenta, char slovo, SOCKET klijent1, SOCKE
 
 int zatvaranjeKonekcijaKaKlijentu(int IDKlijenta, SOCKET klijent1, SOCKET klijent2)
 {
-	
+
 	int iResult;
-	
+
 	if (IDKlijenta == 1)
 	{
 		iResult = shutdown(klijent1, SD_BOTH);
@@ -156,7 +156,7 @@ int zatvaranjeKonekcijaKaKlijentu(int IDKlijenta, SOCKET klijent1, SOCKET klijen
 		closesocket(klijent1);
 		closesocket(klijent2);
 		WSACleanup();
-		
+
 		return NEUSPESNO;
 	}
 
@@ -194,7 +194,7 @@ int main()
 	// kreiranje strukture za cuvanje adrese servera
 	sockaddr_in adresaServera;
 
-	memset((char* ) &adresaServera, 0, sizeof(adresaServera));
+	memset((char*)&adresaServera, 0, sizeof(adresaServera));
 	adresaServera.sin_family = AF_INET;
 	adresaServera.sin_addr.s_addr = INADDR_ANY;
 	adresaServera.sin_port = htons(SERVER_PORT);
@@ -210,7 +210,7 @@ int main()
 	}
 
 	// povezivanje socket-a sa serverom
-	iResult = bind(socketListener, (struct sockaddr *) &adresaServera, sizeof(adresaServera));
+	iResult = bind(socketListener, (struct sockaddr*)&adresaServera, sizeof(adresaServera));
 
 	if (iResult == SOCKET_ERROR)
 	{
@@ -328,7 +328,7 @@ int main()
 			}
 
 		} while (true);
-	
+
 	} while (true);
 
 	// gasenje konekcije ka klijentu
