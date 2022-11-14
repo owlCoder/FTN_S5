@@ -12,7 +12,7 @@ function diferencijalneJednаčine!(dx, x, p, t)
     f = signal(t)
 
     dx[1] = x[2]
-    dx[2] = (-1 / J) * (k2 * (x[3] + R * x[1]) + c * R ^ 2 * x[2])
+    dx[2] = (-1 / J) * (k2 * (x[3] + R * x[1]) * R + c * R ^ 2 * x[2])
     dx[3] = x[4]
     dx[4] = (1 / m2) * (m2 * g - f - k1 * x[3] - k2 * (x[3] + R * x[1]))
 end
