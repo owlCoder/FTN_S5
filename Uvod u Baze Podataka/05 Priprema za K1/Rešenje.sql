@@ -1,0 +1,138 @@
+-- 1
+SELECT
+    PRODUCT_NAME,
+    STANDARD_COST,
+    LIST_PRICE
+FROM
+    PRODUCTS
+ORDER BY
+    LIST_PRICE ASC,
+    STANDARD_COST DESC;
+
+-- 2
+SELECT
+    PRODUCT_NAME,
+    DESCRIPTION,
+    LIST_PRICE - STANDARD_COST AS RAZLIKA
+FROM
+    PRODUCTS
+WHERE
+    PRODUCT_NAME LIKE 'Intel%';
+
+-- 3
+ALTER TABLE ORDER_ITEMS DROP COLUMN UNIT_PRICE;
+
+-- 4
+UPDATE LOCATIONS
+SET
+    CITY = CITY
+        || ' ('
+        || STATE
+        || ')'
+WHERE
+    STATE IS NOT NULL;
+
+-- 5
+SELECT
+    FIRST_NAME,
+    LAST_NAME
+FROM
+    EMPLOYEES E,
+    ORDERS    O
+WHERE
+    E.EMPLOYEE_ID = O.SALESMAN_ID
+    AND O.STATUS = 'Canceled';
+
+-- 6 -> NIJE TACNO, NE VRACA REDOVE
+SELECT
+    FIRST_NAME,
+    LAST_NAME,
+    JOB_TITLE
+FROM
+    EMPLOYEES
+WHERE
+    EMPLOYEE_ID NOT IN (
+        SELECT
+            MANAGER_ID
+        FROM
+            EMPLOYEES
+        GROUP BY
+            MANAGER_ID
+    );
+
+-- 7
+SELECT
+    L.ADDRESS,
+    NVL(W.WAREHOUSE_NAME, '/')
+FROM
+    LOCATIONS  L,
+    WAREHOUSES W
+WHERE
+    L.LOCATION_ID = W.LOCATION_ID(+)
+    AND L.COUNTRY_ID NOT LIKE 'US';
+
+-- 8
+WITH ZARADA_OD_PROIZVODA AS (
+    SELECT
+        (LIST_PRICE - STANDARD_COST) AS NETO_RAZLIKA
+    FROM
+        PRODUCTS,
+        ORDER_ITEMS
+    WHERE
+        ORDER_ITEMS.PRODUCT_ID = PRODUCTS.PRODUCT_ID
+)
+SELECT
+    O_ID,
+    O_DATE,
+    SUM(ZARADA)
+FROM
+    (
+        SELECT
+            ORDERS.ORDER_ID                             AS O_ID,
+            ORDER_DATE                                  AS O_DATE,
+            ZARADA_OD_PROIZVODA.NETO_RAZLIKA * QUANTITY AS ZARADA
+        FROM
+            ORDERS,
+            ORDER_ITEMS,
+            ZARADA_OD_PROIZVODA
+        WHERE
+            ORDERS.ORDER_ID = ORDER_ITEMS.ORDER_ID
+        GROUP BY
+            ORDER_ITEMS.ITEM_ID,
+            ORDER_DATE,
+            ORDERS.ORDER_ID,
+            ZARADA_OD_PROIZVODA.NETO_RAZLIKA * QUANTITY
+        HAVING
+            SUM(ORDER_ITEMS.ITEM_ID) <= 4
+    )
+GROUP BY
+    O_ID,
+    O_DATE
+ORDER BY
+    O_ID;
+
+-- 9
+CREATE OR REPLACE VIEW SALES_IMPACT AS (
+    SELECT
+        EMPLOYEE_ID,
+        FIRST_NAME,
+        LAST_NAME,
+        NVL(SUM((LIST_PRICE - STANDARD_COST) * QUANTITY),
+        0 ) AS PROFIT
+    FROM
+        EMPLOYEES,
+        ORDERS,
+        ORDER_ITEMS,
+        PRODUCTS
+    WHERE
+        EMPLOYEE_ID = SALESMAN_ID
+        AND ORDERS.ORDER_ID = ORDER_ITEMS.ORDER_ID
+        AND ORDER_ITEMS.PRODUCT_ID = PRODUCTS.PRODUCT_ID
+        AND JOB_TITLE = 'Sales Representative'
+    GROUP BY
+        EMPLOYEE_ID,
+        FIRST_NAME,
+        LAST_NAME
+);
+
+-- 10
