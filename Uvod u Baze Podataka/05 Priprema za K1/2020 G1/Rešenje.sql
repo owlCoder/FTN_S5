@@ -1,4 +1,6 @@
 -- 1
+-- Prikazati proizvode (products.product_name, products.standard_cost,
+-- products.list_price) sortirane po prodajnoj ceni rastuće i nabavnoj ceni opadajuće.
 SELECT
     PRODUCT_NAME,
     STANDARD_COST,
@@ -10,6 +12,8 @@ ORDER BY
     STANDARD_COST DESC;
 
 -- 2
+-- Prikazati proizvode (products.product_name, products.description) i razlike
+-- između prodajne i nabavne cene za proizvode čiji nazivi počinju sa 'Intel'.
 SELECT
     PRODUCT_NAME,
     DESCRIPTION,
@@ -20,19 +24,21 @@ WHERE
     PRODUCT_NAME LIKE 'Intel%';
 
 -- 3
+-- Iz tabele order_items obrisati kolonu unit_price.
 ALTER TABLE ORDER_ITEMS DROP COLUMN UNIT_PRICE;
 
 -- 4
+-- U tabeli locations izmeniti kolonu city tako da vrednosti u njoj budu u obliku
+-- <city> (<state>) za lokacije koje u polju state nemaju null vrednosti
 UPDATE LOCATIONS
 SET
-    CITY = CITY
-        || ' ('
-        || STATE
-        || ')'
+    CITY = CITY || ' (' || STATE || ')'
 WHERE
     STATE IS NOT NULL;
 
 -- 5
+-- Prikazati imena i prezimena radnika (employees.first_name,
+-- employees.last_name) koji su povezani sa narudžbinama čiji je status 'Canceled'.
 SELECT
     FIRST_NAME,
     LAST_NAME
@@ -43,24 +49,28 @@ WHERE
     E.EMPLOYEE_ID = O.SALESMAN_ID
     AND O.STATUS = 'Canceled';
 
--- 6 -> NIJE TACNO, NE VRACA REDOVE
+-- 6
+-- Prikazati podatke o radnicima (employees.first_name, employees.last_name,
+-- employees.job_title) koji nisu nikome nadređeni.
 SELECT
+    DISTINCT EMPLOYEE_ID, 
     FIRST_NAME,
     LAST_NAME,
     JOB_TITLE
 FROM
     EMPLOYEES
 WHERE
-    EMPLOYEE_ID NOT IN (
-        SELECT
-            MANAGER_ID
-        FROM
-            EMPLOYEES
-        GROUP BY
-            MANAGER_ID
-    );
+    EMPLOYEE_ID NOT IN 
+    (
+        SELECT MANAGER_ID FROM EMPLOYEES WHERE MANAGER_ID IS NOT NULL
+    )
+    GROUP BY EMPLOYEE_ID, FIRST_NAME, LAST_NAME, JOB_TITLE
+    ORDER BY EMPLOYEE_ID, FIRST_NAME, LAST_NAME, JOB_TITLE;
 
 -- 7
+-- Prikazati podatke o skladištima (location.address,
+-- warehouses.warehouse_name) za skladišta koja nisu u Sjedinjenim Američkim
+-- Državama.
 SELECT
     L.ADDRESS,
     NVL(W.WAREHOUSE_NAME, '/')
@@ -72,6 +82,10 @@ WHERE
     AND L.COUNTRY_ID NOT LIKE 'US';
 
 -- 8
+-- Prikazati podatke o porudžbinama (orders.order_id, orders.order_date) kao i
+-- ukupnu zaradu od porudžbine (suma razlika prodajnih i nabavnih cena prozvoda
+-- pomnoženih količinom proizvoda u stavci porudžbine) za porudžbine koje imaju
+-- manje od 4 stavke.
 WITH ZARADA_OD_PROIZVODA AS (
     SELECT
         (LIST_PRICE - STANDARD_COST) AS NETO_RAZLIKA
@@ -112,6 +126,12 @@ ORDER BY
     O_ID;
 
 -- 9
+-- Kreirati pogled sales_impact koji za svakog radnika (employees.employee_id,
+-- employees.first_name, employees.last_name) sa titulom 'Sales Representative'
+-- prikazuje ukupnu vrednost prihoda od robe koju je prodao (suma razlika prodajnih i
+-- nabavnih cena proizvoda pomnožena količinama datih proizvoda na stavkama računa
+-- izdatih od strane tog radnika). Ako radnik nije izvršio ni jednu prodaju, za ukupnu
+-- vrednost njegovih prodaja postaviti nulu.
 CREATE OR REPLACE VIEW SALES_IMPACT AS (
     SELECT
         EMPLOYEE_ID,
@@ -134,5 +154,3 @@ CREATE OR REPLACE VIEW SALES_IMPACT AS (
         FIRST_NAME,
         LAST_NAME
 );
-
--- 10
