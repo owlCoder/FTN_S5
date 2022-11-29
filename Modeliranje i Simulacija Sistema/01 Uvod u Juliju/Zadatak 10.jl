@@ -2,34 +2,23 @@
 # proizvoljne matrice. Implementirati opcioni ili imenovani parametar funkcije na osnovu koga 
 # će se računati suma elemenata po vrstama ili po kolonama matrice.
 function _sum(A; dims = 2) # racuna se po vrstama podrazumevano
-    dimenzije  = size(A)
-    sumaKolone = []
-    sumaVrste  = []
+    redovi, kolone  = size(A)
+    suma = []
     tmpSuma    = 0
 
-    if dims == 2 # suma po vrstama
-        for i in 1:dimenzije[1]
-            for j in 1:dimenzije[2]
+    for i in 1:redovi
+        for j in 1:kolone
+            if dims == 2 # suma po vrstama
                 tmpSuma += A[i, j]
-            end
-
-            push!(sumaVrste, tmpSuma)
-            tmpSuma = 0
-        end
-
-        return sumaVrste
-    else
-        for i in 1:dimenzije[1]
-            for j in 1:dimenzije[2]
+            else         # suma po kolonama
                 tmpSuma += A[j, i]
             end
-
-            push!(sumaKolone, tmpSuma)
-            tmpSuma = 0
         end
-
-        return sumaKolone
+        push!(suma, tmpSuma)
+        tmpSuma = 0
     end
+
+    return suma
 end
 
 A = [1 4 -2 9 6; -10 -10 0 3 7; 99 3 -3 4 7; 5 -6 0 -8 3; 1 2 3 4 5]
