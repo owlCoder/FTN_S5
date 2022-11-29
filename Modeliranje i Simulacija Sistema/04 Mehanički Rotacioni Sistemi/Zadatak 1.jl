@@ -49,7 +49,7 @@ plot!(rešenje.t, x2, lw = 2, label = "θ'(t)")
 x3 = [x[3] for x in rešenje.u]
 x4 = [x[4] for x in rešenje.u]
 
-Δx_m2 = diff(x3)
-Δv_m2 = diff(x4)
+Δx_m2 = x3
+Δv_m2 = x4
 
 plot(rešenje.t[1:end-1], [Δx_m2, Δv_m2], lw = 2, label = ["Δx_m2" "Δv_m2"])
