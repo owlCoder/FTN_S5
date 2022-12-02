@@ -15,9 +15,9 @@ function diferencijalneJednačine!(dx, x, p, t)
     f = signal(t)
 
     dx[1] = x[2]
-    dx[2] = 1 / m1 * (f + c1 * (x[4] - x[2]) - k1 * x[1])
+    dx[2] = -1 / m1 * (-f + c1 * (x[2] - x[4]) + k1 * x[1])
     dx[3] = x[4]
-    dx[4] = -1 / m2 * (c1 * (x[4] - x[2]) + (c2 + c3) * x[4] + k2 * x[3])
+    dx[4] = -1 / m2 * (-c1 * (x[2] - x[4]) + (c2 + c3) * x[4] + k2 * x[3])
 end
 
 # main.jl
