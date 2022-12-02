@@ -15,7 +15,7 @@ parametri = (10.0, 27.0, 8 / 3)
 tspan = (0.0, 30.0)
 
 problem_a = ODEProblem(diferencijalnaJednacina!, x0, tspan, parametri)
-resenje_a = solve(problem)
+resenje_a = solve(problem_a)
 
 plot(resenje_a)
 
