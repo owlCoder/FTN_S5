@@ -12,9 +12,9 @@ function diferencijalneJednačine!(dx, x, p, t)
     f = signal(t)
 
     dx[1] = x[2]
-    dx[2] = 1 / m1 * (m1 * g - c1 * x[2] - k1 * x[1] - k2 * (x[1] - x[3]))
+    dx[2] = -1 / m1 * (c1 * x[2] + k2 * (x[1] - x[3]) + k1 * x[1] - m1 * g)
     dx[3] = x[4]
-    dx[4] = 1 / m2 * (f + m2 * g + k2 * (x[1] - x[3]) - c2 * x[4])
+    dx[4] = -1 / m2 * (c2 * x[4] - m2 * g - k2 * (x[1] - x[3]) - f)
 end
 
 # main.jl
@@ -28,13 +28,10 @@ rešenje = solve(problem)
 plot(rešenje)
 
 # pod d)
-pozicija1 = [x[1] for x in rešenje.u]
+p1 = [x[1] for x in rešenje.u]
 v1 = [x[2] for x in rešenje.u]
 
-put1 = diff(pozicija1) 
-promena_v1 = diff(v1)
-
-plot(rešenje.t[1:end-1], [put1, promena_v1], xticks = 0:10, lw = 2, label = ["Δx1(t)" "Δv1(t)"] )
+plot(rešenje.t, [p1 v1], xticks = 0:10, lw = 2, label = ["Δx1(t)" "Δv1(t)"] )
 
 # pod e)
 a1 = diff(v1) ./ diff(rešenje.t)
