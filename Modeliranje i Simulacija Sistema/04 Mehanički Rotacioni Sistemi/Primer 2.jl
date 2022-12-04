@@ -25,6 +25,8 @@ x0 = [0.0, 0.0, 0.0, 0.0]
 problem = ODEProblem(diferencijalneJednаčine!, x0, t, p)
 rešenje = solve(problem)
 
+plot(rešenje)
+
 # pod d)
 x = [x[3] for x in rešenje.u]
 predjeni_put = sum(abs.(diff(x)))
