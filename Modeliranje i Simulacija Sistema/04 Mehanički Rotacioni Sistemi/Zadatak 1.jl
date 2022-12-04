@@ -4,7 +4,7 @@ function signal(t)
     tp = rem.(t, 8)
 
     y1 = 0.5
-    y2 = sin.(1 / 4 * pi * tp) .* (tp .< 4)
+    y2 = sin.(2 * pi / 8 * t) .* (tp .<= 4)
 
     y = min.(y1, y2)
 end
@@ -20,9 +20,9 @@ function diferencijalneJednačine!(dx, x, p, t)
     J = 1 / 2 * m1 * R ^ 2
 
     dx[1] = x[2]
-    dx[2] = (-1 / J) * (c * R ^ 2 * x[2] + k1 * x[1] + k2 * (R * x[1] - x[3]) * R)
+    dx[2] = (-1 / J) * (c * R ^ 2 * x[2] + k1 * x[1] + k2 * (R * x[1] + x[3]) * R)
     dx[3] = x[4]
-    dx[4] = (1 / m2) * (f + k2 * (R * x[1] - x[3]))
+    dx[4] = (-1 / m2) * (k2 * (R * x[1] + x[3]) - f)
 end
 
 # main.jl
@@ -39,8 +39,8 @@ plot(rešenje)
 # odrediti promenu ugaonog ubrzanja diska u vremenu, i prikazati na istom grafiku
 # promenu ugaone brzine i ubrzanja
 x2 = [x[2] for x in rešenje.u]
-
 ugaono_ubrzanje = diff(x2) ./ diff(rešenje.t)
+# iscrtati x2 (promena ugaone brzine)
 
 plot(rešenje.t[1:end-1], ugaono_ubrzanje, lw = 2, label = "a(t)")
 plot!(rešenje.t, x2, lw = 2, label = "θ'(t)")
@@ -48,8 +48,5 @@ plot!(rešenje.t, x2, lw = 2, label = "θ'(t)")
 # pod e)
 x3 = [x[3] for x in rešenje.u]
 x4 = [x[4] for x in rešenje.u]
-
-Δx_m2 = x3
-Δv_m2 = x4
-
-plot(rešenje.t[1:end-1], [Δx_m2, Δv_m2], lw = 2, label = ["Δx_m2" "Δv_m2"])
+    
+plot(rešenje.t, [x3, x4], lw = 2, label = ["Δx_m2" "Δv_m2"])
