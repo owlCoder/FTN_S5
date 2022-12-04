@@ -3,7 +3,7 @@ using Plots
 # kruznica
 t_kruznica_domen = 0:0.001:4
 
-t_kruznica = rem.(S, 2)
+t_kruznica = rem.(t_kruznica_domen, 2)
 y_kruznica = sqrt.(1 .- ((t_kruznica .- 1) .^ 2))
 
 # trougao
