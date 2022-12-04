@@ -3,7 +3,7 @@ using Plots
 t = 0:0.01:10
 tp = rem.(tp, 5)
 
-y1 = (2 * tp) .* (tp .< 2)
+y1 = (2 * tp) .* (t .< 2)
 y2 = 2 * ((tp .>= 2) .& (tp .< 4))
 
 # prava simetricna na y1 -> y = -2t sada je potrebno
