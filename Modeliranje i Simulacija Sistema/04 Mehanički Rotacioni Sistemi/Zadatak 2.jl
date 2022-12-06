@@ -18,7 +18,7 @@ function diferencijalneJednačine!(dx, x, p, t)
 
     dx[1] = x[2]
     dx[2] = (-1 / J) * (c1 * R ^ 2 * x[1] + k1 * x[1] + k2 * (R * x[1] + x[3]) * R)
-    dx[3] = (-1 / c2) * (k2 * (R * x[1] + x[3]) - f)
+    dx[3] = (1 / c2) * (f - k2 * (R * x[1] + x[3]))
 end
 
 # main.jl
